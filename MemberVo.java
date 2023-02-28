@@ -1,27 +1,17 @@
-package EX1;
+package com_kh_jdbc.dao;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 public class MemberVo {
-    private int no;
     private String id;
-    private String password;
-    private Date regdate;
+    private String name;
+    private String pwd;
+    private String email;
+    private String phone;
+    private Date date;
 
-    public MemberVo(int no, String id, String password) {
-        this.no = no;
-        this.id = id;
-        this.password = password;
-    }
-    SELECT * FROM MEMBER;
-    public int getNo() {
-        return no;
-    }
-
-    public void setNo(int no) {
-        this.no = no;
-    }
-
+    MemberVo(){};
     public String getId() {
         return id;
     }
@@ -30,29 +20,64 @@ public class MemberVo {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Date getRegdate() {
-        return regdate;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setRegdate(Date regdate) {
-        this.regdate = regdate;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public MemberVo(String id, String name, String pwd, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.pwd = pwd;
+        this.email = email;
+        this.phone = phone;
     }
 
     @Override
     public String toString() {
-        return "MemberVo{" +
-                "no=" + no +
-                ", id='" + id + '\'' +
-                ", password='" + password + '\'' +
-                ", regdate=" + regdate +
+        return "회원정보{" +
+                "아이디='" + id + '\'' +
+                ", 이름='" + name + '\'' +
+                ", 비밀번호='" + pwd + '\'' +
+                ", 이메일='" + email + '\'' +
+                ", 전화번호='" + phone + '\'' +
+                ", 날짜=" + date +
                 '}';
     }
 }
+
