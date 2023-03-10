@@ -1,83 +1,67 @@
-package com_kh_jdbc.dao;
+import java.util.Date;
 
 
-import java.sql.Date;
+public class MemberVo { //�ɹ������͸� ��°�
+    private int num;
+    private String memberId;
+    private String memberPw;
+    private String nickName;
+    private Date regdate; //java.util.Date
 
-public class MemberVo {
-    private String id;
-    private String name;
-    private String pwd;
-    private String email;
-    private String phone;
-    private Date date;
+    public MemberVo() {} //������
 
-    MemberVo(){};
-    public String getId() {
-        return id;
+    public MemberVo(int num, String memberId, String memberPw, String nickName) {
+        super();
+        this.num = num;
+        this.memberId = memberId;
+        this.memberPw = memberPw;
+        this.nickName = nickName;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getNum() {
+        return num;
     }
 
-    public String getName() {
-        return name;
+    public void setNum(int num) {
+        this.num = num;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public String getPwd() {
-        return pwd;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public String getMemberPw() {
+        return memberPw;
     }
 
-    public String getEmail() {
-        return email;
+    public void setMemberPw(String memberPw) {
+        this.memberPw = memberPw;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getNickName() {
+        return nickName;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public Date getRegdate() {
+        return regdate;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public MemberVo(String id, String name, String pwd, String email, String phone) {
-        this.id = id;
-        this.name = name;
-        this.pwd = pwd;
-        this.email = email;
-        this.phone = phone;
+    public void setRegdate(Date regdate) {
+        this.regdate = regdate;
     }
 
     @Override
-    public String toString() {
-        return "회원정보{" +
-                "아이디='" + id + '\'' +
-                ", 이름='" + name + '\'' +
-                ", 비밀번호='" + pwd + '\'' +
-                ", 이메일='" + email + '\'' +
-                ", 전화번호='" + phone + '\'' +
-                ", 날짜=" + date +
-                '}';
+    public String toString() { //������ Ȯ�ο뵵-��ü������ �����ͼ� Ȱ��
+        return "MemberVo [num=" + num + ", memberId=" + memberId + ", memberPw=" + memberPw + ", nickName=" + nickName
+                + ", regdate=" + regdate + "]";
     }
-}
 
+}

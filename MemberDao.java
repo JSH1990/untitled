@@ -1,161 +1,268 @@
-package com_kh_jdbc.dao;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+
+
 
 public class MemberDao {
-    Connection conn = null;
-    Statement stmt = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+    private static MemberDao instance;
+    private DataSource ds;
 
-    Scanner sc = new Scanner(System.in);
-
-    public MemberVo memberSelect(String name) {
-        String sql = "SELECT * FROM MEMBER";
-        String reult = null;
+    private MemberDao() {
         try {
-            conn = Common.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1,2);
-            rs = pstmt.executeQuery();
+            Context ctx = new InitialContext();
+            ds = (DataSource)ctx.lookup("java:/comp/env/jdbc/TestDB"); //JNDI
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-            if(rs.next()) {
-                MemberVo vo = new MemberVo(
-                        rs.getString("MEMBER_ID"),
-                        rs.getString("MEMBER_NAME"),
-                        rs.getString("MEMBER_PWD"),
-                        rs.getString("MEMBER_EMAIL"),
-                        rs.getString("MEMBER_PHONE"));
-                vo.setDate(rs.getDate("MEMBER_DATE"));
-                list.add(vo);
+    public static MemberDao getInstance() {
+        synchronized (MemberDao.class) {
+            if(instance == null) {
+                instance = new MemberDao();
             }
-            Common.close(rs);
-            Common.close(stmt);
-            Common.close(conn);
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return
+        return instance;
     }
 
-
-    public List<MemberVo> memberSelectAll() {
-        String sql = "SELECT * FROM MEMBER";
-        List<MemberVo> list = new ArrayList<>();
+    //C
+    public int insertMember(MemberVo vo) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int result = 0;
         try {
-            conn = Common.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            rs = pstmt.executeQuery();
+            conn = ds.getConnection();
+            System.out.println("���Ӽ���!");
 
+            StringBuffer query = new StringBuffer(); //���ڿ��� �����ϱ� ���� ���(String�� ���� ������ ���ο� ���� �������� ���۴� ���ڳ��� ������ �ٷ� �ٿ��� ȿ������.
+            query.append("insert into \"MEMBER\" ");
+            query.append("(\"NUM\", \"MEMBERID\", \"MEMBERPW\", \"NICKNAME\", \"REGDATE\") "); //NUM �� ( �ȽἭ ����
+            query.append("values (\"MEMBER_SEQ\".nextval, ?, ?, ?, sysdate)"); //���̵�,��й�ȣ,�г���
 
-            while(rs.next()) {
-                MemberVo vo = new MemberVo(
-                rs.getString("MEMBER_ID"),
-                rs.getString("MEMBER_NAME"),
-                rs.getString("MEMBER_PWD"),
-                rs.getString("MEMBER_EMAIL"),
-                rs.getString("MEMBER_PHONE"));
-                vo.setDate(rs.getDate("MEMBER_DATE"));
-                list.add(vo);
+            System.out.println(query.toString());
+
+            pstmt = conn.prepareStatement(query.toString()); //���� �ش� ������ �غ��� �������
+            pstmt.setString(1, vo.getMemberId());
+            pstmt.setString(2, vo.getMemberPw());
+            pstmt.setString(3, vo.getNickName());
+
+            result = pstmt.executeUpdate();
+            System.out.println(result + "���� ���ԵǾ����ϴ�.");
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if(pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-            Common.close(rs);
-            Common.close(stmt);
-            Common.close(conn);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return list;
+        return result;
     }
 
-    public void memberInsert() {
-        System.out.println("정보를 입력 하세요.");
-        System.out.print("아이디를 입력 하세요 : ");
-        String id = sc.next();
-        System.out.print("이름 : ");
-        String name = sc.next();
-        System.out.print("비밀번호 : ");
-        String pwd = sc.next();
-        System.out.print("이메일 : ");
-        String email = sc.next();
-        System.out.print("핸드폰 번호 : ");
-        String phone = sc.next();
 
-        String sql = "INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PWD,MEMBER_EMAIL,MEMBER_PHONE,MEMBER_DATE) VALUES (?,?,?,?,?,SYSDATE)";
-
+    //R
+    public MemberVo selectMember(int num) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        MemberVo result = null;
+        System.out.println("aa");
         try {
-            conn = Common.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            pstmt.setString(2, name);
-            pstmt.setString(3, pwd);
-            pstmt.setString(4, email);
-            pstmt.setString(5, phone);
-            pstmt.executeUpdate();
+            conn = ds.getConnection();
+            System.out.println("���Ӽ��� select!");
+            pstmt = conn.prepareStatement("select * from \"MEMBER\" where \"NUM\"=?"); //MEMBER���̺� ��ü�˻��� �ϰ�,
+            pstmt.setInt(1, num); //�Ѱ��� ���ε��� 2�� ȸ�� �˻�
+            rs =pstmt.executeQuery(); //���͸� ġ�°Ͱ� ����.
 
-        } catch (Exception e) {
+            if (rs.next()) {
+                result = new MemberVo(
+                        rs.getInt("NUM"),
+                        rs.getString("MEMBERID"),
+                        rs.getString(3),
+                        rs.getString(4)
+                );
+                result.setRegdate(rs.getDate("REGDATE"));
+
+            }
+
+
+
+        }catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(pstmt != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        Common.close(pstmt);
-        Common.close(conn);
+        return result;
     }
 
-    public void memberDelete() {
-        System.out.print("삭제할 이름을 입력 하세요 : ");
-        String name = sc.next();
-        String sql = "DELETE FROM MEMBER WHERE MEMBER_NAME = ?";
-
+    public List<MemberVo> selectMemberAll(){
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<MemberVo> result = new ArrayList<>();
         try {
-            conn = Common.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.executeUpdate();
+            conn = ds.getConnection();
+            System.out.println("���Ӽ���!");
+            pstmt = conn.prepareStatement("select * from \"MEMBER\""); //MEMBER���̺� ��ü�˻��� �ϰ�,
+            rs =pstmt.executeQuery(); //���͸� ġ�°Ͱ� ����.
 
-        } catch (Exception e) {
+            while (rs.next()) {
+                MemberVo vo = new MemberVo(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString("MEMBERPW"),
+                        rs.getString(4)
+                );
+                vo.setRegdate(rs.getDate("REGDATE"));
+
+                result.add(vo);
+            }
+
+
+        }catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(pstmt != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        Common.close(stmt);
-        Common.close(conn);
+        return result;
+
     }
-    public void memberUpdate() {
-        System.out.print("변경할 회원의 이름을 입력 하세요 : ");
-        String name = sc.next();
-        System.out.print("이메일 : ");
-        String email = sc.next();
-        System.out.print("핸드폰번호 : " );
-        String phone = sc.next();
 
-        String sql = "UPDATE MEMBER SET MEMBER_EMAIL = ?, MEMBER_PHONE = ? WHERE MEMBER_NAME = ?";
-
+    //U
+    public int updateMember(MemberVo vo) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int result = 0;
         try {
-            conn = Common.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, email);
-            pstmt.setString(2, phone);
-            pstmt.setString(3, name);
-            pstmt.executeUpdate();
+            conn = ds.getConnection();
+            System.out.println("���Ӽ���!");
 
-        } catch (Exception e) {
+            StringBuffer query = new StringBuffer(); //���ڿ��� �����ϱ� ���� ���(String�� ���� ������ ���ο� ���� �������� ���۴� ���ڳ��� ������ �ٷ� �ٿ��� ȿ������.
+            query.append("update \"MEMBER\" ");
+            query.append("set \"MEMBERPW\"=?, \"NICKNAME\"=? "); //*PW�� = �ȽἭ ����
+            query.append("where \"NUM\"=?");
+
+            System.out.println(query.toString());
+
+            pstmt = conn.prepareStatement(query.toString()); //���� �ش� ������ �غ��� �������
+            pstmt.setString(1,vo.getMemberPw());
+            pstmt.setString(2,vo.getNickName());
+            pstmt.setInt(3, vo.getNum());
+
+            result = pstmt.executeUpdate();
+            System.out.println(result + "���� �����Ǿ����ϴ�.");
+
+        }catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            if(pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        Common.close(stmt);
-        Common.close(conn);
+        return result;
     }
 
-    public void memberSelectRst(List<MemberVo> list) {
-        for(MemberVo e : list) {
-            System.out.print(e.getId() + " ");
-            System.out.print(e.getName() + " ");
-            System.out.print(e.getPwd() + " ");
-            System.out.print(e.getEmail() + " ");
-            System.out.print(e.getPhone() + " ");
-            System.out.println();
+
+
+    //D
+    public int deleteMember(int num) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int result = 0;
+        try {
+            conn = ds.getConnection();
+            System.out.println("���Ӽ���!");
+
+            StringBuffer query = new StringBuffer(); //���ڿ��� �����ϱ� ���� ���(String�� ���� ������ ���ο� ���� �������� ���۴� ���ڳ��� ������ �ٷ� �ٿ��� ȿ������.
+            query.append("delete from \"MEMBER\" ");
+            query.append("where \"NUM\"=?");
+
+            System.out.println(query.toString());
+
+            pstmt = conn.prepareStatement(query.toString()); //���� �ش� ������ �غ��� �������
+            pstmt.setInt(1, num);
+
+            result = pstmt.executeUpdate();
+            System.out.println(result + "���� �����Ǿ����ϴ�.");
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if(pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        return result;
     }
+
 }
