@@ -1,36 +1,44 @@
-package 다형성응용1;
+package com.example.demo.entity;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "product")
+@Getter
+@Setter
+@ToString
 
 public class Product {
-    int price;
-    int bonusPoint;
-}
-class TV extends Product {
-    TV(){
-        this.price = 100; //상속 받은 필드의 값을 초기화
-        this.bonusPoint = 10;
-    }
-}
-class Audio extends Product {
-    Audio(){
-        this.price = 120;
-        this.bonusPoint = 12;
-    }
-}
-class Computer extends Product {
-    Computer(){
-        this.price = 200;
-        this.bonusPoint = 20;
-    }
-}
-class  Buyer {
-    int money = 1000;
-    int bonusPoint = 0;
-    void buy(Product p){ //각 제품에 대한 부모클래스 타입의 변수
-        money -= p.price; //제품 구매시 제품의 금액 만큼의 돈을 지불하는 코드
-        bonusPoint += p.bonusPoint; //제품 구매시 해당 포인트를 누적하는 코드
-    }
-    void viewInfo(){
-        System.out.println("잔액 : " + money);
-        System.out.println("포인트 : " + bonusPoint);
-    }
+
+    @Id
+    @Column(name="product_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String productName;
+    private double price;
+    private String brand;
+    private String imageUrl;
+    private String category3Name;
+    private String category4Name;
+
+
+
+    @OneToMany(mappedBy = "product")
+    private List<Cart> cart; // 회원의 장바구니 리스트
+
+    @OneToMany(mappedBy = "product")
+    private List<Likes> likes;
+
+    @OneToMany(mappedBy = "product")
+    private List<OneLineReview> oneLineReview; // 회원의 장바구니 리스트
+
+    @OneToMany(mappedBy = "product")
+    private List<Orders> orders; // 회원의 장바구니 리스트
+
 }
