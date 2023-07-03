@@ -1,4 +1,3 @@
-
 package com.example.demo.dto;
 
 import lombok.*;
@@ -9,11 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-public class OneLineReviewDto {
-    private Long id;
+public class LikesDto {
+    private Long count;
     private Long productId;
     private Long memberId;
     private Long campId;
-    private String comment;
-    private int rating;
+    private Long reviewId;
 }

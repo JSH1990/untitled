@@ -2,7 +2,7 @@ package com.example.demo.dto;
 
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -10,11 +10,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 @Builder
-public class ReviewDto {
+public class CommentDto {
     private Long id;
-    private Long memberId;
-    private String title;
-    private String content;
-    private LocalDate date;
     private int postType;
+    private Long reviewId;
+    private Long memberId;
+    private String content;
+    private LocalDateTime createdAt;
 }
