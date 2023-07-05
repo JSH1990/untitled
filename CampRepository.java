@@ -23,6 +23,4 @@ public interface CampRepository extends JpaRepository<Camp, Long> {
     List<Camp> findByDoNmContainingAndSigunguNmContainingAndAnimalCmgClNotContaining(String doNm, String sigunguNm, String animalCmgCl);
 
     List<Camp> findByDoNmContainingAndAnimalCmgClNotContaining(String doNm, String animalCmgCl);
-
-    List<Camp> findByFacltNm(String facltNm);
 }
