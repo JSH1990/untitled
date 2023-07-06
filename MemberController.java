@@ -1,74 +1,107 @@
-package com.example.demo.controller;
+package com.chicchic.mini_project.controller;
 
-import com.example.demo.dto.MemberDto;
-import com.example.demo.entity.Member;
-import com.example.demo.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
+import com.chicchic.mini_project.dao.ArticleDAO;
+import com.chicchic.mini_project.dao.MemberDAO;
+import com.chicchic.mini_project.vo.ArticleVO;
+import com.chicchic.mini_project.vo.MemberVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("intro")
 public class MemberController {
+    // POST : 로그인
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> memberLogin(@RequestBody Map<String, String> loginData) {
+        String id = loginData.get("id");
+        String pwd = loginData.get("pwd");
 
-    /**
-     * Service 로직 연결
-     */
-    private final MemberService memberService;
-
-    @Autowired
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
+        MemberDAO dao = new MemberDAO();
+        Map<String, Object> response = new HashMap<>();
+        if(dao.loginCheck(id, pwd)) {
+            response.put("success", true);
+            String userImage = dao.getUserImage(id);
+            response.put("id", id);
+            response.put("userImage", userImage);
+        } else {
+            response.put("success", false);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    // GET : 회원조회
+    @GetMapping("/member")
+    public ResponseEntity<List<MemberVO>> memberList(@RequestParam String name) {
+        MemberDAO dao = new MemberDAO();
+        List<MemberVO> list = dao.memberSelect();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    /**
-     * 회원 가입
-     */
-
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    @PostMapping("/signup")
-    public ResponseEntity<Boolean> registerMember(@RequestBody Map<String, String> data) {
-        System.out.println("넘어온 데이터 : " + data);
-        String nickName = data.get("nickName"); // 전송하는 키 값을 맞춰야함
-        String email = data.get("email");
-        String password = data.get("password");
-        String agreed = data.get("agreed");
-        boolean isTrue = memberService.regMember(nickName, email, password, agreed);
+    // GET : 가입여부 확인
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> memberCheck(@RequestParam String id) {
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.regMemberCheck(id);
         return new ResponseEntity<>(isTrue, HttpStatus.OK);
     }
 
-    /**
-     * 로그인
-     */
-//    @PostMapping("/login")
-//    public ResponseEntity<Member> login(@RequestBody MemberDto memberDto) {
-//        Optional<Member> member = memberService.login(memberDto.getEmail(), memberDto.getPassword());
-//        if (member.isPresent()) {
-//            // 로그인 성공
-//            return new ResponseEntity<>(member.get(), HttpStatus.OK);
-//        } else {
-//            // 로그인 실패
-//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-//        }
-//    }
-    // POST : 로그인 체크
-    @PostMapping(value="/login")
-    public ResponseEntity<Boolean> login(@RequestBody Map<String, String> loginData) {
-        String email = loginData.get("email");
-        String password = loginData.get("password");
-        System.out.println("이메일 : " + email);
-        System.out.println("패스워드 : " + password);
-        boolean result = memberService.login(email, password);
-        if (result) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-        }
+    // POST : 회원가입
+    @PostMapping("/new")
+    public ResponseEntity<Boolean> memberRegister(@RequestBody Map<String, String> regData) {
+        String getId = regData.get("id");
+        String getPwd = regData.get("pwd");
+        String getName = regData.get("name");
+        String getMail = regData.get("email");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.memberRegister(getId, getPwd, getName, getMail);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
     }
+
+    // POST : 회원 탈퇴
+    @PostMapping("/memberDelete")
+    public ResponseEntity<Boolean> memberDelete(@RequestBody Map<String, String> delData) {
+        String getId = delData.get("id");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.memberDelete(getId);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @PostMapping("/plusThreePoint") // 3점 증가
+    public ResponseEntity<Boolean> plusThreePoint(@RequestBody Map<String, String> regData) {
+        String getId = regData.get("id");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.plusThreePoint(getId);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @PostMapping("/plusOnePoint") // 1점 증가
+    public ResponseEntity<Boolean> plusOnePoint(@RequestBody Map<String, String> regData) {
+        String getId = regData.get("id");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.plusOnePoint(getId);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @PostMapping("/myGrade") // 등급 새로고침
+    public ResponseEntity<Boolean> myGrade(@RequestBody Map<String, String> regData) {
+        String getId = regData.get("id");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.myGrade(getId);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    @PostMapping("/updatePw") // 비밀번호 수정
+    public ResponseEntity<Boolean> updatePw(@RequestBody Map<String, String> regData) {
+        String getId = regData.get("id");
+        String getPwd = regData.get("pwd");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.updatePw(getId,getPwd);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+
 }
