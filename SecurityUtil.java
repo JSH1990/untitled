@@ -1,13 +1,10 @@
 package com.example.demo.security;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 /**
  *  SecurityContext 에서 전역으로 유저 정보를 제공하는 유틸 클래스
  */
-
-@Slf4j
 public class SecurityUtil {
     private SecurityUtil() { }
 
