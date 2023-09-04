@@ -1,67 +1,72 @@
+package manager;
+
 import java.util.Date;
 
+public class MemberVo {
+	private int num;
+	private String memberId;
+	private String memberPw;
+	private String nickName;
+	private Date regdate;
+	
+	public MemberVo() {
+		
+	}
+	
+	public MemberVo(int num, String memberId, String memberPw, String nickName) {
+		super();
+		this.num = num;
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+		this.nickName = nickName;
+	}
 
-public class MemberVo { //�ɹ������͸� ��°�
-    private int num;
-    private String memberId;
-    private String memberPw;
-    private String nickName;
-    private Date regdate; //java.util.Date
+	public int getNum() {
+		return num;
+	}
 
-    public MemberVo() {} //������
+	public void setNum(int num) {
+		this.num = num;
+	}
 
-    public MemberVo(int num, String memberId, String memberPw, String nickName) {
-        super();
-        this.num = num;
-        this.memberId = memberId;
-        this.memberPw = memberPw;
-        this.nickName = nickName;
-    }
+	public String getMemberId() {
+		return memberId;
+	}
 
-    public int getNum() {
-        return num;
-    }
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
 
-    public void setNum(int num) {
-        this.num = num;
-    }
+	public String getMemberPw() {
+		return memberPw;
+	}
 
-    public String getMemberId() {
-        return memberId;
-    }
+	public void setMemberPw(String memberPw) {
+		this.memberPw = memberPw;
+	}
 
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
-    }
+	public String getNickName() {
+		return nickName;
+	}
 
-    public String getMemberPw() {
-        return memberPw;
-    }
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 
-    public void setMemberPw(String memberPw) {
-        this.memberPw = memberPw;
-    }
+	public Date getRegdate() {
+		return regdate;
+	}
 
-    public String getNickName() {
-        return nickName;
-    }
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
+	}
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public Date getRegdate() {
-        return regdate;
-    }
-
-    public void setRegdate(Date regdate) {
-        this.regdate = regdate;
-    }
-
-    @Override
-    public String toString() { //������ Ȯ�ο뵵-��ü������ �����ͼ� Ȱ��
-        return "MemberVo [num=" + num + ", memberId=" + memberId + ", memberPw=" + memberPw + ", nickName=" + nickName
-                + ", regdate=" + regdate + "]";
-    }
-
+	@Override
+	public String toString() {
+		return "MemberVo [num=" + num + ", memberId=" + memberId + ", memberPw=" + memberPw + ", nickName=" + nickName
+				+ ", regdate=" + regdate + "]";
+	}
+	
+	
+	
 }
