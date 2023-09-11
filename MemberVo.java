@@ -1,72 +1,59 @@
-package manager;
+package managerjsp;
 
 import java.util.Date;
 
 public class MemberVo {
-	private int num;
-	private String memberId;
-	private String memberPw;
-	private String nickName;
-	private Date regdate;
+	int no;
+	String id;
+	String password;
+	String nickname;
+	Date regdate;
 	
-	public MemberVo() {
-		
+	public int getNo() {
+		return no;
+	}
+	public void setNo(int no) {
+		this.no = no;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
-	public MemberVo(int num, String memberId, String memberPw, String nickName) {
-		super();
-		this.num = num;
-		this.memberId = memberId;
-		this.memberPw = memberPw;
-		this.nickName = nickName;
-	}
-
-	public int getNum() {
-		return num;
-	}
-
-	public void setNum(int num) {
-		this.num = num;
-	}
-
-	public String getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
-	}
-
-	public String getMemberPw() {
-		return memberPw;
-	}
-
-	public void setMemberPw(String memberPw) {
-		this.memberPw = memberPw;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-
 	public Date getRegdate() {
 		return regdate;
 	}
-
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
-
+	public MemberVo(int no, String id, String password, String nickname) {
+		super();
+		this.no = no;
+		this.id = id;
+		this.password = password;
+		this.nickname = nickname;
+	}
 	@Override
 	public String toString() {
-		return "MemberVo [num=" + num + ", memberId=" + memberId + ", memberPw=" + memberPw + ", nickName=" + nickName
-				+ ", regdate=" + regdate + "]";
+		return "MemberVo [no=" + no + ", id=" + id + ", password=" + password + ", nickname=" + nickname + ", regdate="
+				+ regdate + "]";
 	}
 	
 	
+
 	
 }
