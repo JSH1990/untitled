@@ -1,10 +1,11 @@
 package board;
 
-import java.sql.Date;
+import common.JdbcUtil;
 
 public class main {
 	public static void main(String[] args) {
-		BoardDao dao = new BoardDao();
-		dao.selectAll();
+		
+			
 	}
+
 }
