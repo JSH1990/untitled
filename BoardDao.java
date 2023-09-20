@@ -55,7 +55,7 @@ public class BoardDao {
 	}return ret;
 	}
 	
-	//조회수증가
+	//수정
 	public int update(BoardVo vo) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -91,7 +91,7 @@ public class BoardDao {
 	}return ret;
 	}
 	
-	//수정
+	//조회수증가
 		public int updateCnt(int num) {
 			Connection con=null;
 			PreparedStatement pstmt=null;
@@ -132,7 +132,7 @@ public class BoardDao {
 		Statement stmt=null;
 		String query = "SELECT \r\n" + 
 				"	`num`,\r\n" + 
-				"    `titles`,\r\n" + 
+				"    `title`,\r\n" + 
 				"    `writer`,\r\n" + 
 				"    `content`,\r\n" + 
 				"    `regdate`,\r\n" + 
