@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.kh.backend_finalproject.dto.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 public class TokenDto {
     private String grantType;
     private String accessToken;
+    private String refreshToken;
     private Long tokenExpiresIn;
+    private String authority;
 }
