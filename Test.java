@@ -1,23 +1,26 @@
-package 시험;
+package test_me;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Test {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Map<Integer, String> test = new HashMap<>();
 
-        while (true){
-            System.out.print("문자열을 입력해주세요 :");
-            String str = sc.nextLine();
+        int sum = 0;
+        test.put(1, "스페이스");
+        test.put(2, "하트");
+        System.out.println("test = " + test);
 
-            if (str.equals() == str. ){
-                System.out.println("프로그램을 종료 합니다.");
-                break;
+        System.out.println("test.keySet() = " + test.keySet());
 
-            }else i{
-                System.out.println(str.length() + "글자 입니다.");
-            }
+        for (Integer key : test.keySet()) {
+            sum += key;
         }
 
+        System.out.println("sum = " + sum);
+
+
     }
+
+
 }
