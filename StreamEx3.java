@@ -1,22 +1,60 @@
-package 스트렘예제3;
+package streamEX;
 
-import java.util.Arrays;
-import java.util.stream.IntStream;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
+/*
+    스트림의 중간연산(1)
+ */
 public class StreamEx3 {
     public static void main(String[] args) {
-        String[] arr = {"남해이", "최지열", "남행선"};
-        Stream<String> stream1 = Arrays.stream(arr); //배열로 부터 스트림을 만듦
-        stream1.forEach(e -> System.out.print(e + " "));
-        System.out.println();
+        Stream<Student> studentStream = Stream.of(
+                new Student("a", 3, 300),
+                new Student("b", 1, 150),
+                new Student("c", 2, 100),
+                new Student("d", 3, 200),
+                new Student("e", 1, 300)
+        );
 
-        Stream<String> stream2 = Arrays.stream(arr, 1, 3);
-        stream2.forEach(e -> System.out.print(e + " "));
-        //숫자 범위로 부터 스트림 만들기
-        IntStream stream = IntStream.rangeClosed(1, 100); //
-        int sum = stream.sum();
-        System.out.println("합계 : " + sum);
+        //studentStream.sorted(Comparator.comparing(Student::getBan) //1.반별 정렬
+        studentStream.sorted(Comparator.comparing((Student s) -> s.getBan()) //람다식 변환
+                .thenComparing(Comparator.naturalOrder())) //2.기본 정렬
+                .forEach(System.out::println);
+    }
+
+
+}
+
+class Student implements Comparable<Student> {
+    String name;
+    int ban;
+    int totalScore;
+
+    Student(String name, int ban, int totalScore) {
+        this.name = name;
+        this.ban = ban;
+        this.totalScore = totalScore;
+    }
+
+    public String toString(){
+        return String.format("%s, %d, %d", name, ban, totalScore);
+    }
+
+    String getName() {
+        return name;
+    }
+
+    int getBan() {
+        return ban;
+    }
+
+    int getTotalScore() {
+        return totalScore;
+    }
+
+    //총점 내림차순을 기본 정렬로 한다.
+    public int compareTo(Student s) {
+        return s.totalScore - this.totalScore;
     }
 
 }
