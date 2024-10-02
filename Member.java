@@ -1,58 +1,74 @@
-package com.example.demo.entity;
+package jpql;
 
-import lombok.*;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "member")
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userNumber;
-    private String userName;
-    @Column(unique = true, nullable = false)
-    private String nickName;
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
+    private Long id;
 
-    @Column(nullable = false)
-    private String password;
-    @Column(unique = true, nullable = false)
-    private String email;
-    private String userAddr;
-    private int userPhoneNm;
-    private String userImg;
-    private String userGrade = "1";
-    private int userScore;
-    @Column(nullable = false)
-    private String reqAgreed;
-    private String optAgreed;
-    private String snsLogin;
-    private LocalDateTime join_time;
+    @Column(name= "USERNAME")
+    private String username;
 
-    @OneToMany(mappedBy = "member")
-    private List<Cart> cart; // 회원의 장바구니 리스트
+    @Embedded
+    private Address homeAddress;
 
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comment; // 답글
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOODS", joinColumns =
+    @JoinColumn(name = "MEMBER_ID")
+    )
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<Likes> likes; // 좋아요
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS", joinColumns =
+    @JoinColumn(name = "MEMBER_ID"))
+    private List<Address> addressHistory = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<OneLineReview> oneLineReview; // 한줄평
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
 
-    @OneToMany(mappedBy = "member")
-    private List<Orders> orders; // 주문
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
 
-    @OneToMany(mappedBy = "member")
-    private List<Review> review; // 리뷰게시판
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
+    }
+
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
+    }
+
+    public List<Address> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<Address> addressHistory) {
+        this.addressHistory = addressHistory;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }
