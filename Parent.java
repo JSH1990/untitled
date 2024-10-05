@@ -1,8 +1,9 @@
-package lang.object;
+package extends1.super1;
 
-//부모가 없으면 묵시적으로 Object 클래스를 상속받는다.
-public class Parent extends Object{
-    public void parentMethod(){
-        System.out.println("Parent.parentMethod");
+public class Parent {
+    public String value = "parent";
+
+    public void hello(){
+        System.out.println("Parent.hello");
     }
 }
