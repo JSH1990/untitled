@@ -1,39 +1,39 @@
-package test_me;
-
+package test;
 
 public class CardGameMain {
     public static void main(String[] args) {
+        Deck deck = new Deck();
         Player player1 = new Player("플레이어1");
         Player player2 = new Player("플레이어2");
 
-        Card card1 = new Card();
-        Card card2 = new Card();
+        for (int i = 0; i < 5; i++) {
+            player1.drawCard(deck);
+            player2.drawCard(deck);
+        }
 
-        Integer pickOne = card1.pick();
-        System.out.println("pickOne = " + pickOne);
-        player1.setCard(pickOne);
+        player1.showHand();
+        player2.showHand();
 
-        System.out.println("player1 = " + player1);
+        Player winner = getWinner(player1, player2);
 
-        System.out.println();
+        if(winner != null){
+            System.out.println(winner.getName() + " 승리");
+        }else{
+            System.out.println("무승부");
+        }
+    }
 
-        Integer pickTwo = card2.pick();
-        System.out.println("pickTwo = " + pickTwo);
-        player2.setCard(pickTwo);
-        System.out.println("player2 = " + player2);
+    private static Player getWinner(Player player1, Player player2) {
+        Player winner;
+        int sum1 = player1.rankSum();
+        int sum2 = player2.rankSum();
 
-        Integer sum1 = card1.print(player1);
-
-        Integer sum2 = card2.print(player2);
-
-        if(sum1.equals(sum2)){
-            System.out.println("비겼습니다.");
+        if(sum1 > sum2){
+            return player1;
+        }else if(sum2 == sum1){
+            return null;
         }else {
-            if(sum1 > sum2){
-                System.out.println(player1.name+"님이 이겼습니다.");
-            }else {
-                System.out.println(player1.name+"님이 졌습니다.");
-            }
+            return player2;
         }
     }
 }
