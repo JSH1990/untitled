@@ -1,18 +1,10 @@
-package extends1.super1;
+package poly.overriding;
 
 public class Child extends Parent{
     public String value = "child";
 
     @Override
-    public void hello() {
-        System.out.println("Child.hello");
-    }
-
-    public void call(){
-        System.out.println("this.value = " + this.value);
-        System.out.println("super value = " + super.value);
-
-        this.hello();
-        super.hello();
+    public void method() {
+        System.out.println("Child.method");
     }
 }

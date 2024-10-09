@@ -1,9 +1,11 @@
-package extends1.super1;
+package poly.overriding;
 
 public class Parent {
     public String value = "parent";
 
-    public void hello(){
-        System.out.println("Parent.hello");
+    public void method(){
+        System.out.println("Parent.method");
     }
 }
+
+
